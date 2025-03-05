@@ -1,27 +1,27 @@
 package com.example.crudusuario.model;
 
 import jakarta.persistence.*;
-
-
 import java.util.List;
 
 @Entity
-public class Lista {
+@Table(name = "artistas")
+public class Artista {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String nombre;
 
-    @OneToMany(mappedBy = "lista")  // Relación de uno a muchos con Cancion
-    private List<Cancion> canciones;  // Lista de canciones que pertenecen a esta lista
+    @OneToMany(mappedBy = "artista")  // Relación de uno a muchos con Cancion mediante el atributo "artista" en Cancion.java
+    private List<Cancion> canciones;  // Lista de canciones que pertenecen a este artista
 
     // Constructor sin parámetros
-    public Lista() {}
+    public Artista() {}
 
     // Constructor con parámetros
-    public Lista(String nombre) {
+    public Artista(String nombre) {
         this.nombre = nombre;
     }
 
@@ -50,15 +50,15 @@ public class Lista {
         this.canciones = canciones;
     }
 
-    // Método para agregar una canción a la lista
+    // Método para agregar una canción al artista
     public void agregarCancion(Cancion cancion) {
         canciones.add(cancion);
-        cancion.setLista(this);  // Establece la relación con esta lista
+        cancion.setArtista(this);  // Establece la relación con este artista
     }
 
-    // Método para eliminar una canción de la lista
+    // Método para eliminar una canción del artista
     public void eliminarCancion(Cancion cancion) {
         canciones.remove(cancion);
-        cancion.setLista(null);  // Elimina la relación con esta lista
+        cancion.setArtista(null);  // Elimina la relación con este artista
     }
 }

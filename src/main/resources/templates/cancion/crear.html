@@ -1,3 +1,70 @@
+<!-- <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Crear Canción</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    />
+  </head>
+  <body>
+    
+    <div th:replace="~{layout/navbar :: navbar}"></div>
+
+    <div class="container mt-4">
+      <h1 class="mb-4">Crear Canción</h1>
+
+  
+      <form th:action="@{/api/canciones}" method="post">
+        <div class="mb-3">
+          <label for="titulo" class="form-label">Título</label>
+          <input
+            type="text"
+            class="form-control"
+            id="titulo"
+            name="titulo"
+            th:value="${cancion.titulo}"
+            required
+          />
+        </div>
+
+        <div class="mb-3">
+          <label for="genero" class="form-label">Género</label>
+          <input
+            type="text"
+            class="form-control"
+            id="genero"
+            name="genero"
+            th:value="${cancion.genero}"
+            required
+          />
+        </div>
+
+        <div class="mb-3">
+          <label for="artista" class="form-label">Seleccionar Artista</label>
+          <select id="artista" name="artista_id" class="form-control" required>
+            <option value="" disabled selected>Seleccione un artista</option>
+            <option
+              th:each="artista: ${artistas}"
+              th:value="${artista.id}"
+              th:text="${artista.nombre}"
+            ></option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn btn-success">Crear Canción</button>
+        <a href="/api/canciones/listar" class="btn btn-secondary">Cancelar</a>
+      </form>
+    </div>
+  </body>
+</html>
+
+
+<script>
+ 
+</script> -->
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
   <head>
@@ -42,19 +109,16 @@
         </div>
 
         <div class="mb-3">
-          <label for="lista" class="form-label"
-            >Seleccionar Lista de Reproducción</label
-          >
-          <select th:field="*{listas}" id="lista" class="form-control" multiple>
+          <label for="artista_id" class="form-label">Seleccionar Artista</label>
+          <select id="artista_id" name="artista_id" class="form-control" required>
+            <option value="" disabled selected>Seleccione un artista</option>
             <option
-              th:each="lista : ${listas}"
-              th:value="${lista.id}"
-              th:text="${lista.nombre}"
+              th:each="artista: ${artistas}"
+              th:value="${artista.id}"
+              th:text="${artista.nombre}"
             ></option>
           </select>
         </div>
-
-        <input type="hidden" id="lista_id" name="lista_id" />
 
         <button type="submit" class="btn btn-success">Crear Canción</button>
         <a href="/api/canciones/listar" class="btn btn-secondary">Cancelar</a>
@@ -62,17 +126,3 @@
     </div>
   </body>
 </html>
-
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    // Obtener el select y el campo oculto
-    const selectLista = document.getElementById("lista");
-    const idListaField = document.getElementById("lista_id");
-
-    // Cuando cambie la selección, asignar el valor al campo oculto
-    selectLista.addEventListener("change", function () {
-      // Asignar el primer valor seleccionado (ya que se permite seleccionar solo uno)
-      idListaField.value = selectLista.value;
-    });
-  });
-</script>

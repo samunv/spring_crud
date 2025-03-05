@@ -3,7 +3,7 @@ package com.example.crudusuario.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.example.crudusuario.model.Cancion;
+import com.example.crudusuario.model.Artista;
 
 @Repository
-public interface CancionRepository extends JpaRepository<Cancion, Long> {}
+public interface ArtistaRepository extends JpaRepository<Artista, Long> {}

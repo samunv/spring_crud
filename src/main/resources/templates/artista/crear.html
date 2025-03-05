@@ -12,33 +12,17 @@
     <!-- Incluir la barra de navegación -->
     <div th:replace="~{layout/navbar :: navbar}"></div>
 
-    <form th:action="@{/api/listas}" th:object="${lista}" method="post">
+    <form th:action="@{/api/artistas}" th:object="${artista}" method="post">
       <div class="mb-3">
-        <label for="nombre" class="form-label">Nombre de la lista</label>
+        <label for="nombre" class="form-label">Nombre del Artista</label>
         <input
           type="text"
           th:field="*{nombre}"
           id="nombre"
           class="form-control"
-          placeholder="Nombre de la lista"
+          placeholder="Nombre del artista"
           required
         />
-      </div>
-
-      <div class="mb-3">
-        <label for="canciones" class="form-label">Seleccionar Canciones</label>
-        <select
-          th:field="*{canciones}"
-          id="canciones"
-          class="form-control"
-          multiple
-        >
-          <option
-            th:each="cancion : ${canciones}"
-            th:value="${cancion.id}"
-            th:text="${cancion.titulo}"
-          ></option>
-        </select>
       </div>
 
       <button type="submit" class="btn btn-primary">Guardar</button>

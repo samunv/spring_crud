@@ -5,55 +5,58 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "canciones")
 public class Cancion {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	private String titulo;
-	private String genero;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@ManyToOne
-	@JoinColumn(name = "lista_id") // La columna que contiene la relación con la lista
-	private Lista lista;
+    @Column(nullable = false)
+    private String titulo;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    @Column(nullable = false)
+    private String genero;
 
-	public Cancion() {
-	}
+    @ManyToOne
+    @JoinColumn(name = "artista_id", nullable = false) // La columna que contiene la relación con el artista
+    private Artista artista;
 
-	public Cancion(String titulo, String genero, Lista lista) {
-		this.titulo = titulo;
-		this.genero = genero;
-		this.lista = lista;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public Long getId() {
-		return id;
-	}
+    public Cancion() {
+    }
 
-	public String getTitulo() {
-		return titulo;
-	}
+    public Cancion(String titulo, String genero, Artista artista) {
+        this.titulo = titulo;
+        this.genero = genero;
+        this.artista = artista;
+    }
 
-	public String getGenero() {
-		return genero;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setTitulo(String titulo) {
-		this.titulo = titulo;
-	}
+    public String getTitulo() {
+        return titulo;
+    }
 
-	public void setGenero(String genero) {
-		this.genero = genero;
-	}
+    public String getGenero() {
+        return genero;
+    }
 
-	public Lista getLista() {
-		return this.lista;
-	}
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
 
-	public void setLista(Lista lista) {
-		this.lista = lista;
-	}
+    public void setGenero(String genero) {
+        this.genero = genero;
+    }
 
+    public Artista getArtista() {
+        return this.artista;
+    }
+
+    public void setArtista(Artista artista) {
+        this.artista = artista;
+    }
 }

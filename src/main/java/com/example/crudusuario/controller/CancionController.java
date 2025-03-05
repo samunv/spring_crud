@@ -5,94 +5,95 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.crudusuario.model.Artista;
 import com.example.crudusuario.model.Cancion;
-import com.example.crudusuario.model.Lista;
 import com.example.crudusuario.service.CancionService;
-import com.example.crudusuario.service.ListaService;
+import com.example.crudusuario.service.ArtistaService;
 
 @Controller
 @RequestMapping("/api/canciones")
 public class CancionController {
 
     private final CancionService cancionService;
-    private final ListaService listaService;
+    private final ArtistaService artistaService;
 
-    public CancionController(CancionService cancionService, ListaService listaService) {
+    public CancionController(CancionService cancionService, ArtistaService artistaService) {
         this.cancionService = cancionService;
-        this.listaService = listaService;
+        this.artistaService = artistaService;
     }
 
-    // 📌 Mostrar formulario para crear una nueva canción
     @GetMapping("/crear")
     public String crearForm(Model model) {
         model.addAttribute("cancion", new Cancion());
-        model.addAttribute("listas", listaService.listarListas());
+        model.addAttribute("artistas", artistaService.listarArtistas());
         return "cancion/crear";
     }
 
     @PostMapping
     public String crearCancion(@RequestParam String titulo,
-                               @RequestParam String genero,
-                               @RequestParam Long lista_id,
-                               RedirectAttributes redirectAttributes) {
-        Lista lista = listaService.obtenerListaPorId(lista_id);
-        if (lista == null) {
-            redirectAttributes.addFlashAttribute("error", "Lista no encontrada");
+            @RequestParam String genero,
+            @RequestParam Long artista_id,
+            RedirectAttributes redirectAttributes) {
+        try {
+            System.out.println("Título: " + titulo);
+            System.out.println("Género: " + genero);
+            System.out.println("ID del Artista: " + artista_id.longValue());
+
+            Artista artista = artistaService.obtenerArtistaPorId(artista_id.longValue());
+
+            Cancion cancion = new Cancion();
+            cancion.setTitulo(titulo);
+            cancion.setGenero(genero);
+            cancion.setArtista(artista);
+
+            cancionService.agregarCancion(cancion);
+
+            return "redirect:/api/canciones/listar";
+        } catch (RuntimeException e) {
+            redirectAttributes.addFlashAttribute("error", "Artista no encontrado");
             return "redirect:/api/canciones/crear";
         }
-
-        Cancion cancion = new Cancion();
-        cancion.setTitulo(titulo);
-        cancion.setGenero(genero);
-        cancion.setLista(lista); 
-
-        cancionService.agregarCancion(cancion);
-        
-        return "redirect:/api/canciones/listar";
     }
 
     @GetMapping("/editar/{id}")
     public String editarForm(@PathVariable Long id, Model model) {
         Cancion cancion = cancionService.obtenerCancionPorId(id);
         if (cancion == null) {
-            return "redirect:/api/canciones/listar"; 
+            return "redirect:/api/canciones/listar";
         }
 
         model.addAttribute("cancion", cancion);
-        model.addAttribute("listas", listaService.listarListas()); 
+        model.addAttribute("artistas", artistaService.listarArtistas());
         return "cancion/editar";
     }
 
- 
     @PostMapping("/actualizar/{id}")
-    public String actualizar(@PathVariable Long id, 
-                             @RequestParam String titulo, 
-                             @RequestParam String genero, 
-                             @RequestParam Long lista_id,
-                             RedirectAttributes redirectAttributes) {
+    public String actualizar(@PathVariable Long id,
+            @RequestParam String titulo,
+            @RequestParam String genero,
+            @RequestParam Long artista_id,
+            RedirectAttributes redirectAttributes) {
         Cancion cancion = cancionService.obtenerCancionPorId(id);
         if (cancion == null) {
             redirectAttributes.addFlashAttribute("error", "Canción no encontrada");
             return "redirect:/api/canciones/listar";
         }
 
-        Lista lista = listaService.obtenerListaPorId(lista_id);
-        if (lista == null) {
-            redirectAttributes.addFlashAttribute("error", "Lista no encontrada");
+        Artista artista = artistaService.obtenerArtistaPorId(artista_id);
+        if (artista == null) {
+            redirectAttributes.addFlashAttribute("error", "Artista no encontrado");
             return "redirect:/api/canciones/editar/" + id;
         }
 
-    
         cancion.setTitulo(titulo);
         cancion.setGenero(genero);
-        cancion.setLista(lista);
+        cancion.setArtista(artista);
 
         cancionService.actualizarCancion(id, cancion);
         redirectAttributes.addFlashAttribute("success", "Canción actualizada exitosamente");
 
         return "redirect:/api/canciones/listar";
     }
-
 
     @GetMapping("/eliminar/{id}")
     public String eliminar(@PathVariable Long id, RedirectAttributes redirectAttributes) {

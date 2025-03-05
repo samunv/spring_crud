@@ -13,8 +13,8 @@
     <div th:replace="~{layout/navbar :: navbar}"></div>
     
     <div class="container mt-4">
-      <h1 class="mb-4">Listas de Reproducción</h1>
-      <a th:href="@{/api/listas/crear}" class="btn btn-success mb-3">Añadir Lista</a>
+      <h1 class="mb-4">Lista de Artistas</h1>
+      <a th:href="@{/api/artistas/crear}" class="btn btn-success mb-3">Añadir Artista</a>
 
       <!-- Tabla para mostrar las listas -->
       <table class="table table-bordered table-striped">
@@ -27,21 +27,18 @@
           </tr>
         </thead>
         <tbody>
-          <!-- Recorrer las listas y mostrarlas en la tabla -->
-          <tr th:each="lista : ${listas}">
-            <td th:text="${lista.id}"></td>
-            <td th:text="${lista.nombre}"></td>
+          <tr th:each="a : ${artistas}">
+            <td th:text="${a.id}"></td>
+            <td th:text="${a.nombre}"></td>
             <td>
               <ul>
-                <li th:each="cancion : ${lista.canciones}" th:text="${cancion.titulo}"></li>
+                <li th:each="cancion : ${a.canciones}" th:text="${cancion.titulo}"></li>
               </ul>
             </td>
             <td>
-              <!-- Botón para editar la lista -->
-              <a th:href="@{/api/listas/editar/{id}(id=${lista.id})}" class="btn btn-warning">Editar</a>
+              <a th:href="@{/api/artistas/editar/{id}(id=${a.id})}" class="btn btn-warning">Editar</a>
               
-              <!-- Botón para eliminar la lista -->
-              <a th:href="@{/api/listas/eliminar/{id}(id=${lista.id})}" 
+              <a th:href="@{/api/artistas/eliminar/{id}(id=${a.id})}" 
                  class="btn btn-danger"
                  onclick="return confirm('¿Estás seguro de eliminar esta Lista de reproducción?');">
                 Eliminar
